@@ -5,12 +5,37 @@ import {
   FlatList,
   ActivityIndicator,
   Text,
+  Button,
+  TouchableOpacity,
 } from 'react-native';
 import {useProductList} from '../../api/Product/ProductList';
 import ProductItem from '../../components/Product/ProductItem';
 import * as productTypes from '../../types/Product/Product.types';
+import { useNavigation } from '@react-navigation/native';
+import PlusIcon from '../../assets/Icons/PlusIcon';
 const ProductListScreen = () => {
+  const navigation = useNavigation();
+
+  const HeaderRightButton = () => {
+    const navigation = useNavigation();
+  
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('AddProductScreen' as never)}>
+        <PlusIcon size={24} color="#2b71fa" style={{marginRight: 10}} />
+      </TouchableOpacity>
+    );
+  };
+  React.useEffect(() => {
+    // Use `setOptions` to update the button that we previously specified
+    // Now the button includes an `onPress` handler to update the count
+    navigation.setOptions({
+      headerRight: () => <HeaderRightButton />,
+    });
+  }, [navigation]);
   const {ProductList, isLoading, error, isFetching} = useProductList();
+
+
+
 
   if (isLoading || isFetching) {
     return (
