@@ -5,34 +5,53 @@ import {
   FlatList,
   ActivityIndicator,
   Text,
-  Button,
+
   TouchableOpacity,
 } from 'react-native';
-import {useProductList} from '../../api/Product/ProductList';
+import { useProductList } from '../../api/Product/ProductList';
 import ProductItem from '../../components/Product/ProductItem';
 import * as productTypes from '../../types/Product/Product.types';
 import { useNavigation } from '@react-navigation/native';
 import PlusIcon from '../../assets/Icons/PlusIcon';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
+import Button from '../../components/shareds/Button';
+
+
+
+type RootDrawerParamList = {
+  Live: undefined;
+  ProductList: undefined;
+  CategoryList: undefined;
+};
 const ProductListScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrawerNavigationProp<RootDrawerParamList>>();
 
   const HeaderRightButton = () => {
     const navigation = useNavigation();
-  
     return (
       <TouchableOpacity onPress={() => navigation.navigate('AddProductScreen' as never)}>
-        <PlusIcon size={24} color="#2b71fa" style={{marginRight: 10}} />
+        <PlusIcon size={24} color="#2b71fa" style={{ marginRight: 10 }} />
       </TouchableOpacity>
     );
   };
+
+  const HeaderLeftButton = () => {
+    const navigation = useNavigation();
+    return (
+      <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+        <PlusIcon size={24} color="#2b71fa" style={{ marginRight: 10 }} />
+      </TouchableOpacity>
+    );
+  };
+
+
   React.useEffect(() => {
-    // Use `setOptions` to update the button that we previously specified
-    // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
       headerRight: () => <HeaderRightButton />,
+      headerLeft: () => <HeaderLeftButton />
     });
   }, [navigation]);
-  const {ProductList, isLoading, error, isFetching} = useProductList();
+  const { ProductList, isLoading, error, isFetching } = useProductList();
 
 
 
@@ -65,7 +84,7 @@ const ProductListScreen = () => {
     );
   }
 
-  const renderItem = ({item}: {item: productTypes.Product}) => (
+  const renderItem = ({ item }: { item: productTypes.Product }) => (
     <ProductItem
       name={item.name}
       price={item.price1}
@@ -85,6 +104,7 @@ const ProductListScreen = () => {
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.listContainer}
       />
+      <Button onPress={()=>{}} title='title'/>
     </View>
   );
 };

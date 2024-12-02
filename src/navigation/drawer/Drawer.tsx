@@ -10,6 +10,14 @@ import ProductStack from '../stack/ProductStack';
 
 const Drawer = createDrawerNavigator();
 
+const HeaderRightButton = () => {
+  return (
+    <TouchableOpacity>
+      <PlusIcon color={'#000000'} />
+    </TouchableOpacity>
+  )
+}
+
 
 const MyDrawer = () => {
   return (
@@ -20,12 +28,13 @@ const MyDrawer = () => {
           name="ProductList"
           // component={ProductListScreen}
           component={ProductStack}
-          // options={{ headerShown: false }}
-          options={{
-            title: 'Ürün Sayfası',
-            // headerRight: () => <HeaderRightButton />,
+          options={{ headerShown: false }}
+
+          // options={{
+          //   title: 'Ürün Sayfası',
+          //   // headerRight: () => <HeaderRightButton />,
             
-          }}
+          // }}
         />
         <Drawer.Screen
           name="CategoryList"
