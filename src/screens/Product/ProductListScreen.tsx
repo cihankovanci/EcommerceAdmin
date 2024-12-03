@@ -1,60 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
   FlatList,
   ActivityIndicator,
   Text,
-
   TouchableOpacity,
 } from 'react-native';
 import { useProductList } from '../../api/Product/ProductList';
 import ProductItem from '../../components/Product/ProductItem';
-import * as productTypes from '../../types/Product/Product.types';
-import { useNavigation } from '@react-navigation/native';
+import SwipeToDelete from '../../components/shareds/SwipeToDelete';
 import PlusIcon from '../../assets/Icons/PlusIcon';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
-import Button from '../../components/shareds/Button';
+import { useNavigation } from '@react-navigation/native';
+import * as productTypes from '../../types/Product/Product.types';
+import { useProductDelete } from '../../api/Product/ProductDelete';
 
-
-
-type RootDrawerParamList = {
+export type RootDrawerParamList = {
   Live: undefined;
   ProductList: undefined;
   CategoryList: undefined;
 };
+
 const ProductListScreen = () => {
   const navigation = useNavigation<DrawerNavigationProp<RootDrawerParamList>>();
+  const { ProductList, isLoading, error, isFetching } = useProductList();
+  const { productDelete } = useProductDelete()
+  const [localProductList, setLocalProductList] = useState<productTypes.Product[]>(
+    ProductList || []
+  );
 
-  const HeaderRightButton = () => {
-    const navigation = useNavigation();
-    return (
-      <TouchableOpacity onPress={() => navigation.navigate('AddProductScreen' as never)}>
-        <PlusIcon size={24} color="#2b71fa" style={{ marginRight: 10 }} />
-      </TouchableOpacity>
-    );
-  };
+  const HeaderRightButton = () => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('AddProductScreen' as never)}
+    >
+      <PlusIcon size={24} color="#2b71fa" style={{ marginRight: 10 }} />
+    </TouchableOpacity>
+  );
 
-  const HeaderLeftButton = () => {
-    const navigation = useNavigation();
-    return (
-      <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-        <PlusIcon size={24} color="#2b71fa" style={{ marginRight: 10 }} />
-      </TouchableOpacity>
-    );
-  };
-
+  const HeaderLeftButton = () => (
+    <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+      <PlusIcon size={24} color="#2b71fa" style={{ marginRight: 10 }} />
+    </TouchableOpacity>
+  );
 
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => <HeaderRightButton />,
-      headerLeft: () => <HeaderLeftButton />
+      headerLeft: () => <HeaderLeftButton />,
     });
   }, [navigation]);
-  const { ProductList, isLoading, error, isFetching } = useProductList();
+
+  React.useEffect(() => {
+    if (ProductList) {
+      setLocalProductList(ProductList);
+    }
+  }, [ProductList]);
+
+  const handleDelete = (key: string) => {
+    console.log('Deleting product with ID:', key);
+    setLocalProductList(prev => prev.filter(item => item.id.toString() !== key));
+    deleteFromDatabase(Number(key))
+ 
+  };
 
 
-
+  const deleteFromDatabase = (id: number) => {
+    productDelete.mutateAsync({ id: id }).then((res) => {
+      console.log('res', res);
+    }).catch(err => {
+      console.log('err:', err);
+    });
+  }
 
   if (isLoading || isFetching) {
     return (
@@ -76,7 +93,7 @@ const ProductListScreen = () => {
     );
   }
 
-  if (!ProductList || ProductList.length === 0) {
+  if (!localProductList || localProductList.length === 0) {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>No products available.</Text>
@@ -84,27 +101,28 @@ const ProductListScreen = () => {
     );
   }
 
-  const renderItem = ({ item }: { item: productTypes.Product }) => (
-    <ProductItem
-      name={item.name}
-      price={item.price1}
-      currency={item.currency?.abbr || ''}
-      stockAmount={item.stockAmount}
-      imageUrl={
-        item.images?.[0]?.thumbUrl ? `https:${item.images[0].thumbUrl}` : null
-      }
-    />
-  );
-
   return (
     <View style={styles.container}>
-      <FlatList
-        data={ProductList}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
+      <SwipeToDelete
+        data={localProductList.map(item => ({
+          ...item,
+          key: item.id.toString(),
+        }))}
+        renderItem={({ item }: { item: productTypes.Product }) => (
+          <ProductItem
+            name={item.name}
+            price={item.price1}
+            currency={item.currency?.abbr || ''}
+            stockAmount={item.stockAmount}
+            imageUrl={
+              item.images?.[0]?.thumbUrl
+                ? `https:${item.images[0].thumbUrl}`
+                : null
+            }
+          />
+        )}
+        onDelete={handleDelete}
       />
-      <Button onPress={()=>{}} title='title'/>
     </View>
   );
 };
@@ -115,9 +133,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  listContainer: {
-    padding: 10,
   },
   loaderContainer: {
     flex: 1,

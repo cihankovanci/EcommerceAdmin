@@ -1,5 +1,5 @@
-import {api} from '../api';
-import {useMutation} from '@tanstack/react-query';
+import { api } from '../api';
+import { useMutation } from '@tanstack/react-query';
 
 interface Params {
   name: string;
@@ -15,10 +15,12 @@ interface Params {
   taxIncluded: number;
   stockTypeLabel: string;
   customShippingDisabled: number;
+  hasGift: number;
   status: number;
   hasOption: number;
   categoryShowcaseStatus: number;
 }
+
 
 export async function ProductPost(params: Params) {
   return await api.call({
@@ -34,5 +36,5 @@ export function useProductPost() {
       return ProductPost(params);
     },
   });
-  return productPost;
+  return {productPost};
 }

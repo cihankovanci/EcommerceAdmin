@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, TextInputProps } from 'react-native';
+import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 
 interface CustomTextInputProps extends TextInputProps {
     title: string;
-    info:string;
+    info: string;
     value: string | number;
     onChangeText: (text: string) => void;
 }
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     },
     info: {
         fontWeight: '400',
-        color: '#212121'
+        color: '#212121',
+
     }
 });
 

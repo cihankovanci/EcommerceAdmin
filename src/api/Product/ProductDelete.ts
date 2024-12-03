@@ -1,5 +1,5 @@
-import {api} from '../api';
-import {useMutation} from '@tanstack/react-query';
+import { api } from '../api';
+import { useMutation } from '@tanstack/react-query';
 
 interface Params {
   id: number;
@@ -18,5 +18,5 @@ export function useProductDelete() {
       return ProductDelete(params);
     },
   });
-  return productDelete;
+  return { productDelete };
 }
