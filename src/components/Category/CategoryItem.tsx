@@ -16,7 +16,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       {imageUrl ? (
-        <Image source={{uri: imageUrl}} style={styles.image} />
+        <Image source={{uri: `https:${imageUrl}`}} style={styles.image} />
       ) : (
         <View style={styles.placeholderImage} />
       )}

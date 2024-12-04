@@ -17,9 +17,9 @@ type CategoriesListScreenNavigationProp = NativeStackNavigationProp<
 const CategoriesListScreen = () => {
   const {CategoryList} = useCategoryList();
   const {categoryDelete} = useCategoryDelete();
-  const [localCategoryList, setLocalCategoryList] = React.useState(
-    CategoryList || [],
-  );
+  const [localCategoryList, setLocalCategoryList] = React.useState<
+    CategoryType[]
+  >([]);
   const navigation = useNavigation<CategoriesListScreenNavigationProp>();
 
   const HeaderRightButton = () => (
@@ -42,7 +42,7 @@ const CategoriesListScreen = () => {
   }, [navigation]);
 
   React.useEffect(() => {
-    if (CategoryList) {
+    if (Array.isArray(CategoryList)) {
       setLocalCategoryList(CategoryList);
     }
   }, [CategoryList]);

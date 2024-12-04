@@ -21,11 +21,15 @@ export async function CategoryPut(id: number, body: BodyParams) {
   });
 }
 
+interface Params {
+  id: number;
+  body: BodyParams;
+}
 export function useCategoryPut() {
   const categoryPut = useMutation({
     mutationFn: ({id, body}: {id: number; body: BodyParams}) => {
       return CategoryPut(id, body);
     },
   });
-  return categoryPut;
+  return {categoryPut};
 }
