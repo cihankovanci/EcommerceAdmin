@@ -27,5 +27,5 @@ export function useCategoryPost() {
       return CategoryPost(params);
     },
   });
-  return categoryPost;
+  return {categoryPost};
 }

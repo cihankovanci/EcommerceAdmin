@@ -7,39 +7,24 @@ import CategoriesListScreen from '../../screens/Categories/CategoriesListScreen'
 import Live from '../../screens/Live/Live';
 import PlusIcon from '../../assets/Icons/PlusIcon';
 import ProductStack from '../stack/ProductStack';
+import CategoryStack from '../stack/CategoryStack';
 
 const Drawer = createDrawerNavigator();
-
-const HeaderRightButton = () => {
-  return (
-    <TouchableOpacity>
-      <PlusIcon color={'#000000'} />
-    </TouchableOpacity>
-  )
-}
-
 
 const MyDrawer = () => {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="ProductList">
+      <Drawer.Navigator initialRouteName="CategoryList">
         <Drawer.Screen name="Live" component={Live} options={{title: 'Live'}} />
         <Drawer.Screen
           name="ProductList"
-          // component={ProductListScreen}
           component={ProductStack}
-          options={{ headerShown: false }}
-
-          // options={{
-          //   title: 'Ürün Sayfası',
-          //   // headerRight: () => <HeaderRightButton />,
-            
-          // }}
+          options={{headerShown: false}}
         />
         <Drawer.Screen
           name="CategoryList"
-          component={CategoriesListScreen}
-          options={{title: 'Kategori'}}
+          component={CategoryStack}
+          options={{headerShown: false}}
         />
       </Drawer.Navigator>
     </NavigationContainer>

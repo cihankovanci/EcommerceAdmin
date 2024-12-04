@@ -18,5 +18,5 @@ export function useCategoryDelete() {
       return CategoryDelete(params);
     },
   });
-  return categoryDelete;
+  return {categoryDelete};
 }

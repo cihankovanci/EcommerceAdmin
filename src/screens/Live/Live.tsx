@@ -1,6 +1,7 @@
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-// import WebView from 'react-native-webview';
+import WebView from 'react-native-webview'
+
 
 
 const Live = () => {
@@ -12,13 +13,13 @@ const Live = () => {
         enabled={Platform.OS === "android"}
       >
 
-        {/* <WebView
+        <WebView
           originWhitelist={['*']}
           setSupportMultipleWindows={false}
-          source={{ uri: 'https://www.google.com.tr/' }}
+          source={{ uri: 'https://testcase.myideasoft.com' }}
           style={{ marginTop: 20, flex: 1 }}
           keyboardDisplayRequiresUserAction={false}
-        /> */}
+        />
         </KeyboardAvoidingView>
     </View>
   )
